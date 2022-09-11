@@ -1,0 +1,20 @@
+<div class="col-lg-3 col-md-3">
+    <div class="card">
+       <a href="{{ instance.get_city_url }}">
+             <h6 style="margin-left: 15px; margin-top: 5px;">{{instance.title}}
+                <small> 
+                    {% if instance.num_property > 0 %}
+                        
+                        {% if instance.num_property == 1%}
+                            ({{instance.num_property}} Property)
+                        {% else %}
+                            ({{instance.num_property}} Properties)
+                        {% endif %}
+                    {% else %}
+                        (comming soon)
+                    {% endif %}
+                </small>
+            </h6> 
+       </a>
+    </div>
+</div>

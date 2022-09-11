@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load classname %}
+
+{% block style %}
+    <link href='{% static "css/property_list.css" %}' rel="stylesheet">
+{% endblock %}
+
+
+
+
+   {% block content %}
+
+    <!-- Main Slider With Form -->
+    <section class="osahan-slider">
+        <div id="osahanslider" class="carousel slide" data-ride="carousel">
+            
+            <div class="carousel-inner" role="listbox">
+                {% if city_name %}
+                
+                    <div class="carousel-item active" 
+                        style="background-image: {% if city_name.image %}url('{{ city_name.image.url }}') {% else %} url({% static 'images/city_view.jpg' %}){% endif %}">      
+                        <div class="overlay"></div>
+                    </div>
+                 
+                {% endif %}
+               
+            </div>
+            
+        </div>
+        
+        {% include 'search/snippet/search_form.html' %}
+    </section>
+         <!-- End Main Slider With Form -->
+
+
+         
+    <!-- END: header -->
+
+  {% if city_property%}
+
+
+      <!-- Properties List -->
+    <section class="section-padding">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-3 col-md-3">
+      
+                <div class="card">
+      
+                  <div class="card-body">
+                    <h5 class="card-title mb-3">Property Type</h5>
+      
+                    <ul class="sidebar-card-list">
+                      {% if property_type %}
+                        {% for type in property_type %}
+                          <li><a href="#"><i class="mdi mdi-chevron-right"></i> For {{ type.title }} <span class="sidebar-badge"></span></a></li>
+                          <!-- <li><a href="#"><i class="mdi mdi-chevron-right"></i> For Sale <span class="sidebar-badge">1200</span></a></li> -->
+                        {% endfor %}
+                      {% endif %}
+                    </ul>
+      
+      
+                  </div>
+                </div>
+      
+      
+                <div class="card">
+      
+                  <div class="card-body">
+                    {% if city_name %}
+                     
+                        <h6 class="card-title mb-3">Neigborhoods In {{ city_name.title }}</h6>
+                     
+                    {% endif %}
+
+      
+                    <ul class="sidebar-card-list">
+                      {% if neigborhood_name %}
+                        {% for neigborhood in neigborhood_name %}
+                          {% if neigborhood.num_property > 0 %}
+                            <li><a href="{{ neigborhood.get_neighborhood_url }}"><i class="mdi mdi-chevron-right"></i> {{neigborhood.title}}<span class="sidebar-badge">{{ neigborhood.num_property }} </span></a></li>
+                          {% endif %}
+                        {% endfor %}   
+                      {% endif %}
+                    </ul>
+      
+      
+                  </div>
+                </div>
+      
+                {% if featured %}
+                
+                  <div class="card">
+        
+                    <div class="card-body">
+                      <h5 class="card-title mb-4">Featured Properties</h5>
+                      
+                      <div id="featured-properties" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            {% for featured in featured|slice:":3" %}
+                              <li data-target="#featured-properties" data-slide-to="{{ featured.count }}" class="{% if forloop.counter == 1 %}active{% endif %}"></li>
+                          <!-- <li data-target="#featured-properties" data-slide-to="1"></li> -->
+                            {% endfor %}
+                        </ol>
+                        <div class="carousel-inner">
+                          {% for featured in featured|slice:":3" %}
+                            <div class="{% if forloop.counter == 1 %}carousel-item active{% else %} carousel-item{% endif %}">
+
+                              {% include 'property/snippet/featured_card_small.html' with instance=featured %}
+                                  
+                              
+                            </div>
+                          {% endfor %}
+                          
+                        </div>
+                      </div>
+        
+                    </div>
+                  </div>
+
+        
+                </div>
+              {% endif %}
+      
+              <div class="col-lg-9 col-md-9">
+      
+      
+      
+                <!-- <div class="osahan_top_filter row">
+                  <div class="col-lg-6 col-md-6 tags-action">
+                   
+                  </div>
+                  <div class="col-lg-6 col-md-6 sort-by-btn float-right">
+                    
+                    <div class="dropdown float-right">
+                      <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="mdi mdi-filter"></i> Sort by
+                      </button>
+                      <div class="dropdown-menu float-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#"><i class="mdi mdi-chevron-right"></i> New </a>
+                        <a class="dropdown-item" href="#"><i class="mdi mdi-chevron-right"></i> Price: Low to High </a>
+                        <a class="dropdown-item" href="#"><i class="mdi mdi-chevron-right"></i> Price: High to Low </a>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+      
+      
+                  <div class="row">
+                      {% for obj in city_property %}
+                                  
+                          {% include 'property/snippet/property_card_smaller.html' with instance=obj %}
+                                  
+
+                      {% endfor %}
+                  </div>
+      
+                  {% include 'property/snippet/paginator.html' with paginate=city_property %}
+      
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- End Properties List -->
+
+
+      
+    <!-- END: slider  -->
+
+  {% else %}
+
+  <section class="section-padding">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-8 col-md-8">
+                  <h5>Ops No property here </h5>
+      
+              <div class="card">
+              </div>
+          </div>
+      </div>
+  </section>
+
+  {% endif %}
+
+         
+    {% endblock %}

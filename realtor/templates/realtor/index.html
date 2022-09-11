@@ -1,0 +1,102 @@
+
+
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+             <!-- Inner Header -->
+        {% if request.user.realtor %}
+             {% if request.user.realtor.image %}
+                 <section class="section-padding bg-dark inner-header" style="background-image:  url('{{ request.user.realtor.image.url }}')" >
+             {% endif %}
+        {% else %}
+            <section class="section-padding bg-dark inner-header" >
+        {% endif %}    
+         
+    <!-- <section class="section-padding bg-dark inner-header">. -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="mt-0 mb-3 text-white">My Properties</h1>
+                    <div class="breadcrumbs">
+                        <p class="mb-0 text-white"><a class="text-white" href="/">Home</a>  /  <span class="text-success">{{ request.user.first_name }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+
+    <section class="tab-view">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav justify-content-center">
+                         
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'main:profile' %}">User Profile</a>
+                        </li>
+                                {% if request.user.realtor %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'realtor:update' pk=request.user.realtor.id %}">Edit Realtor Information</a>
+                                    </li>
+                              
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-success" href="{% url 'realtor:home' %}">My Properties</a>
+                                    </li>
+                                {% endif %}
+                               
+                                
+            
+                                <li class="nav-item">
+                                    <a class="nav-link" href="favorite-properties.html">Favorite Properties</a>
+                                </li>
+                                {% if request.user.realtor %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'realtor:create' %}">Add Property</a>
+                                    </li>
+                                {% endif %}
+                        
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+    </section>
+       
+
+   
+
+    
+
+        <!-- My Properties -->
+        <section class="section-padding">
+            <div class="container">
+            
+                {% if property  %}
+                        
+                    
+                
+                    <div class="row">
+                        {% for instance in property %}
+                            {% include 'property/snippet/property_card_horizontal.html' %}
+                                                    
+                        {% endfor %}
+                    </div>
+                    {% include 'property/snippet/paginator.html' with paginate=property %}
+                          
+                {% else %}
+                    <h5> You don't have property yet or your account is not authorized</h5>
+                    <h6> add new property </h6>
+                {% endif %}
+            </div>
+           
+        </section>
+ 
+
+
+
+
+{% endblock %}
